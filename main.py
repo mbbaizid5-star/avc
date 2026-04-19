@@ -139,8 +139,8 @@ async def start_bot():
 
         while True:
             try:
-                await page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=60000)
-                await page.wait_for_timeout(2000)
+                await page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=1000)
+                await page.wait_for_timeout(500)
 
                 if "login" in page.url:
                     await login()
@@ -151,7 +151,7 @@ async def start_bot():
 
                 for row in rows:
                     cols = await row.query_selector_all("td")
-                    if len(cols) >= 7:
+                    if len(cols) >= 5:
                         d = (await cols[0].inner_text()).strip()
                         n = (await cols[2].inner_text()).strip()
                         s = (await cols[5].inner_text()).strip()
@@ -190,13 +190,13 @@ async def start_bot():
 
                                 sent_msgs[uid] = item['date']
 
-                if len(sent_msgs) > 2000:
+                if len(sent_msgs) > 500:
                     sent_msgs.clear()
 
             except Exception:
                 pass
 
-            await asyncio.sleep(4)
+            await asyncio.sleep(0.5)
 
 if __name__ == "__main__":
     asyncio.run(start_bot())
