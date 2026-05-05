@@ -16,7 +16,7 @@ MY_PASS = os.getenv("MY_PASS")
 TARGET_URL = "http://2.59.169.96/ints/agent/SMSCDRStats"
 LOGIN_URL = "http://2.59.169.96/ints/login"
 
-# ✅ Firebase URL (FROM FIRST SCRIPT)
+# ✅ Firebase URL
 FB_URL = "https://otp-manager-511ec-default-rtdb.asia-southeast1.firebasedatabase.app/bot"
 
 ADMIN_LINK = "https://t.me/Mhnirob1"
@@ -27,27 +27,35 @@ CN_LINK = "https://t.me/TS_CHENNEL"
 sent_msgs = {}
 START_TIME = time.time()
 
-# ===== FIREBASE FUNCTION (ADDED) =====
-def update_firebase(num, msg, date_str):
+# ===== FIREBASE FUNCTION (UPDATED) =====
+def update_firebase(num, msg, date_str, cli_source):
     try:
-        url = f"{FB_URL}/sms_logs/{num}.json"
+        unique_id = f"{num}_{int(time.time()*1000)}"  # ✅ unique key
+        url = f"{FB_URL}/sms_logs/{unique_id}.json"
+
         payload = {
             "number": num,
             "message": msg,
             "time": date_str,
+            "service": cli_source,   # ✅ added
             "paid": False
         }
+
         requests.put(url, json=payload, timeout=5)
-    except:
-        pass
+
+    except Exception as e:
+        print("Firebase Error:", e)
+
 
 # ===== UTILITIES =====
 def extract_otp(msg):
     match = re.search(r'\b(\d{3,8}|\d{3}-\d{3}|\d{4}\s\d{4})\b', msg)
     return match.group(0) if match else "N/A"
 
+
 def send_telegram(date_str, num, sms_text, otp, cli_source, is_update=False):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+
     masked = num[:4] + "TS" + num[-4:] if len(num) > 8 else num
 
     header = "🔄🛎️ <b>UPDATED SMS RECEIVED</b>" if is_update else "🛎️ <b>NEW SMS RECEIVED</b>"
@@ -82,6 +90,7 @@ def send_telegram(date_str, num, sms_text, otp, cli_source, is_update=False):
     except:
         return False
 
+
 # ===== MAIN BOT =====
 async def start_bot():
     print("🚀 Bot started...")
@@ -94,6 +103,7 @@ async def start_bot():
         async def login():
             try:
                 await page.goto(LOGIN_URL, wait_until="networkidle", timeout=60000)
+
                 await page.evaluate(f"""() => {{
                     const myUser = "{MY_USER}";
                     const myPass = "{MY_PASS}";
@@ -130,6 +140,7 @@ async def start_bot():
                         }}
                     }}
                 }}""")
+
                 return True
             except:
                 return False
@@ -139,7 +150,7 @@ async def start_bot():
 
         while True:
             try:
-                await page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=1000)
+                await page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=3000)
                 await page.wait_for_timeout(500)
 
                 if "login" in page.url:
@@ -170,8 +181,9 @@ async def start_bot():
 
                     if is_first_scan:
                         otp = extract_otp(latest['sms'])
+
                         if send_telegram(latest['date'], latest['num'], latest['sms'], otp, latest['cli']):
-                            update_firebase(latest['num'], latest['sms'], latest['date'])
+                            update_firebase(latest['num'], latest['sms'], latest['date'], latest['cli'])
 
                         sent_msgs[f"{latest['num']}|{latest['sms']}"] = latest['date']
                         is_first_scan = False
@@ -186,17 +198,18 @@ async def start_bot():
 
                             if uid not in sent_msgs:
                                 if send_telegram(item['date'], item['num'], item['sms'], otp, item['cli']):
-                                    update_firebase(item['num'], item['sms'], item['date'])
+                                    update_firebase(item['num'], item['sms'], item['date'], item['cli'])
 
                                 sent_msgs[uid] = item['date']
 
                 if len(sent_msgs) > 500:
                     sent_msgs.clear()
 
-            except Exception:
-                pass
+            except Exception as e:
+                print("Loop Error:", e)
 
             await asyncio.sleep(0.5)
+
 
 if __name__ == "__main__":
     asyncio.run(start_bot())
