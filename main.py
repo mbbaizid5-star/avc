@@ -49,9 +49,17 @@ def update_firebase(num, msg, date_str, cli_source):
 
 # ===== UTILITIES =====
 def extract_otp(msg):
-    match = re.search(r'\b(\d{3,8}|\d{3}-\d{3}|\d{4}\s\d{4})\b', msg)
-    return match.group(0) if match else "N/A"
+    match = re.search(r'\b\d{3,4}(?:[ -]?\d{3,4})?\b', msg)
 
+    if match:
+        otp = match.group(0)
+
+        # space ও dash remove
+        otp = re.sub(r'[\s-]', '', otp)
+
+        return otp
+
+    return "N/A"
 
 def send_telegram(date_str, num, sms_text, otp, cli_source, is_update=False):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
