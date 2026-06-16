@@ -17,7 +17,7 @@ TARGET_URL = "http://2.59.169.96/ints/agent/SMSCDRStats"
 LOGIN_URL = "http://2.59.169.96/ints/login"
 
 # ✅ Firebase URL
-FB_URL = "https://otp-manager-511ec-default-rtdb.asia-southeast1.firebasedatabase.app/bot"
+FB_URL = "https://mhnirob-default-rtdb.firebaseio.com/bot"
 
 ADMIN_LINK = "https://t.me/Mhnirob1"
 BOT_LINK = "https://t.me/tsall_bot"
