@@ -19,10 +19,10 @@ LOGIN_URL = "http://2.59.169.96/ints/login"
 # ✅ Firebase URL
 FB_URL = "https://mhnirob-default-rtdb.firebaseio.com/bot"
 
-ADMIN_LINK = "https://t.me/Mhnirob1"
-BOT_LINK = "https://t.me/tsall_bot"
+ADMIN_LINK = "https://t.me/ariful_215"
+BOT_LINK = "@Ts_Team_Work_bot"
 DV_LINK = "https://t.me/Mhnirob1"
-CN_LINK = "https://t.me/TS_CHENNEL"
+CN_LINK = "https://t.me/arif73788"
 
 sent_msgs = {}
 START_TIME = time.time()
