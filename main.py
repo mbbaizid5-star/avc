@@ -13,8 +13,8 @@ CHAT_ID = os.getenv("CHAT_ID")
 MY_USER = os.getenv("MY_USER")
 MY_PASS = os.getenv("MY_PASS")
 
-TARGET_URL = "http://smshadi.net/agent/SMSCDRReports"
-LOGIN_URL = "http://smshadi.net/login"
+TARGET_URL = "https://smshadi.net/agent/SMSCDRReports"
+LOGIN_URL = "https://smshadi.net/login"
 
 # ✅ Firebase URL
 FB_URL = "https://mhnirob-default-rtdb.firebaseio.com/bot"
