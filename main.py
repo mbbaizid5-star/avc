@@ -17,12 +17,12 @@ TARGET_URL = "http://2.59.169.96/ints/agent/SMSCDRReports"
 LOGIN_URL = "http://2.59.169.96/ints/login"
 
 # ✅ Firebase URL
-FB_URL = "https://tsnirob-ac69e-default-rtdb.asia-southeast1.firebasedatabase.app/bot"
+FB_URL = "https://mhnirob-default-rtdb.firebaseio.com/bot"
 
-ADMIN_LINK = "https://t.me/ariful_215"
-BOT_LINK = "@Ts_Team_Work_bot"
+ADMIN_LINK = "https://t.me/Mhnirob1"
+BOT_LINK = "@tsall_bot"
 DV_LINK = "https://t.me/Mhnirob1"
-CN_LINK = "https://t.me/arif73788"
+CN_LINK = "https://t.me/TS_CHENNEL"
 
 sent_msgs = {}
 START_TIME = time.time()
